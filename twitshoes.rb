@@ -1,10 +1,10 @@
 Shoes.setup do
   gem 'twitter'
 end
-#Just testing git
+
 require 'twitter'
 
-class TwitShoes2 < Shoes
+class TwitShoes < Shoes
   url '/', :index
 
   def index
@@ -21,7 +21,7 @@ class TwitShoes2 < Shoes
             image "#{img}"
           end
           stack :width => "80%" do
-            para "#{status}", :size => 9, :font => "Arial", :stroke => '#dddddd'
+            para "#{status}", :size => 9, :font => "Verdana", :stroke => '#dddddd'
           end
         end
       end
@@ -31,7 +31,7 @@ class TwitShoes2 < Shoes
   def login
     @username = ask "Please, enter your username:"
     @password = ask "Please, enter your password:", :secret => true
-    user = Twitter::Base.new(@username, @password, { :encoding => 'utf-8'}).user(@username)
+    user = Twitter::Base.new(@username, @password).user(@username)
     @name = user.name
   end
 
@@ -39,9 +39,13 @@ class TwitShoes2 < Shoes
     @img, @status = [], []
     Twitter::Base.new(@username, @password).timeline.each do |s|
       @img   << s.user.profile_image_url
-      @status << s.text
+      @status << to_utf(s.text)
     end
     [@img, @status]
+  end
+  
+  def to_utf string
+    string.gsub(/&#(\d+);/){[$1.to_i].pack("U")}
   end
 
 end
