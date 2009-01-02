@@ -1,0 +1,10 @@
+Name    : TwitShoes
+
+Version : 0.2
+
+Website : http://github/mitkok/twitshoes/tree/master
+Author  : Mitko Kostov
+
+This is a simple twitter client writtent in Ruby using the multiplatform GUI named Shoes.
+
+Enjoy !
