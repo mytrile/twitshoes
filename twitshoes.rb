@@ -1,7 +1,6 @@
 Shoes.setup do
   gem 'twitter'
 end
-
 require 'twitter'
 
 class TwitShoes < Shoes
