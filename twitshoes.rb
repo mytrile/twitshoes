@@ -1,16 +1,30 @@
 Shoes.setup do
   gem 'twitter'
 end
+
 require 'twitter'
+require 'lib/functions'
 
 class TwitShoes < Shoes
   url '/', :index
-
+  url '/main', :main
   def index
+    background "#333333".."#1d1d1d"
+    flow :margin => [45, 15, 90, 20] do
+      image('twitter-logo.png')
+    end
+    stack :margin => [90, 0, 90, 0] do
+      @username = edit_line :text => 'Username', :width => 100, :height => 23 
+      @password = edit_line :text => 'Password', :width => 100, :height => 23, :secret => true
+      
+    end 
+       
+  end
+  
+  def main
+    
     background "#0f0f0f"
-    user = login
     t = timeline
-
     t[0].zip(t[1]).each { |img, status|
       flow :margin => 2 do
         background "#333333".."#1d1d1d", :curve => 6
@@ -20,32 +34,13 @@ class TwitShoes < Shoes
             image "#{img}"
           end
           stack :width => "80%" do
-            para "#{status}", :size => 9, :font => "Verdana", :stroke => '#dddddd'
+            para "#{status}", :size => 8, :font => "Verdana", :stroke => '#dddddd'
           end
         end
       end
     }
   end
 
-  def login
-    @username = ask "Please, enter your username:"
-    @password = ask "Please, enter your password:", :secret => true
-    user = Twitter::Base.new(@username, @password).user(@username)
-    @name = user.name
-  end
-
-  def timeline
-    @img, @status = [], []
-    Twitter::Base.new(@username, @password).timeline.each do |s|
-      @img   << s.user.profile_image_url
-      @status << to_utf(s.text)
-    end
-    [@img, @status]
-  end
-  
-  def to_utf string
-    string.gsub(/&#(\d+);/){[$1.to_i].pack("U")}
-  end
-
 end
-Shoes.app :width => 260, :height => 400, :resizable => true, :title => "TwitShoes"
+
+Shoes.app :width => 280, :height => 500, :resizable => true, :title => "TwitShoes"
